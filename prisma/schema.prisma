@@ -11,8 +11,8 @@ datasource db {
 }
 
 model Link {
-  id Int @id @default(autoincrement())
-  link String
-  shortUrl String
+  id        Int      @id @default(autoincrement())
+  link      String
+  shortUrl  String
   createdAt DateTime @default(now())
 }
