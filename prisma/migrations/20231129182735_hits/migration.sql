@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Link" ADD COLUMN     "hits" INTEGER NOT NULL DEFAULT 0;

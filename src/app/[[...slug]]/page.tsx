@@ -1,6 +1,23 @@
 import Image from 'next/image'
+import { redirect } from 'next/navigation';
+import { useEffect } from 'react';
+import { prisma } from '@/util/db';
 
-export default function Home() {
+async function checkIfRedirect(slug: string) {
+  const link = await prisma.link.findUnique({
+    where: {
+      uid: slug
+    }
+  });
+
+  if (!link) return;
+  
+  return redirect(link.link)
+}
+
+export default async function Home({ params }: { params: { slug: string }}) {
+  await checkIfRedirect(params.slug);
+  
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">

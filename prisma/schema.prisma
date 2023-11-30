@@ -12,7 +12,9 @@ datasource db {
 
 model Link {
   id        Int      @id @default(autoincrement())
-  link      String
+  link      String   
+  uid       String   @unique
   shortUrl  String
+  hits      Int      @default(0)
   createdAt DateTime @default(now())
 }
