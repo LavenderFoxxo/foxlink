@@ -1,12 +1,11 @@
 import Image from 'next/image'
 import { redirect } from 'next/navigation';
-import { useEffect } from 'react';
 import { prisma } from '@/util/db';
 
 async function checkIfRedirect(slug: string) {
   const link = await prisma.link.findUnique({
     where: {
-      uid: slug
+      uid: slug[0]
     }
   });
 
@@ -16,7 +15,7 @@ async function checkIfRedirect(slug: string) {
 }
 
 export default async function Home({ params }: { params: { slug: string }}) {
-  await checkIfRedirect(params.slug);
+  if (params.slug) await checkIfRedirect(params.slug);
   
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
