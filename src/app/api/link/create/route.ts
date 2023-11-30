@@ -19,24 +19,24 @@ async function checkIfExisting(hash: string) {
 }
 
 export async function POST(req: NextRequest) {
-  const requestHeaders = headers();
-  if (requestHeaders.get("authorization") !== process.env.API_KEY!)
-    return NextResponse.json(
-      { message: "Unauthorized", status: 401 },
-      { status: 401 }
-    );
-
-  const reqBody = await req.json();
-
-  if (typeof reqBody.link == undefined)
-    return NextResponse.json(
-      { message: "Malformed Request", status: 400 },
-      { status: 400 }
-    );
-
-  const link = reqBody.link!;
-
   try {
+    const requestHeaders = headers();
+    if (requestHeaders.get("authorization") !== process.env.API_KEY!)
+      return NextResponse.json(
+        { message: "Unauthorized", status: 401 },
+        { status: 401 }
+      );
+
+    const reqBody = await req.json();
+
+    if (typeof reqBody.url == undefined)
+      return NextResponse.json(
+        { message: "Malformed Request", status: 400 },
+        { status: 400 }
+      );
+
+    const link = reqBody.url;
+
     let hash = getHash();
     while (await checkIfExisting(hash)) {
       hash = getHash();
@@ -55,10 +55,13 @@ export async function POST(req: NextRequest) {
       data: { shortUrl: `${process.env.HOST}/${hash}`, uid: hash, link },
     });
   } catch (e) {
-    return NextResponse.json({
-      message: "Error",
-      error: e,
-      status: 500
-    }, { status: 500 })
+    return NextResponse.json(
+      {
+        message: "Error",
+        error: e,
+        status: 500,
+      },
+      { status: 500 }
+    );
   }
 }
