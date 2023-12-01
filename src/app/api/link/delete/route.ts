@@ -1,21 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { customAlphabet } from "nanoid";
 import { prisma } from "@/util/db";
-
-const characters =
-  "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-const getHash = customAlphabet(characters, 4);
-
-async function checkIfExisting(hash: string) {
-  const existingCheck = await prisma.link.findUnique({
-    where: {
-      uid: hash,
-    },
-  });
-
-  return existingCheck;
-}
 
 export async function POST(req: NextRequest) {
   try {
@@ -34,25 +19,27 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
 
-    const link = reqBody.url;
+    const uid = reqBody.uid;
 
-    let hash = getHash();
-    while (await checkIfExisting(hash)) {
-      hash = getHash();
-    }
-
-    await prisma.link.create({
-      data: {
-        shortUrl: `${process.env.HOST}/${hash}`,
-        uid: hash,
-        link,
+    const existingLink = await prisma.link.findUnique({
+      where: {
+        uid,
       },
     });
 
-    return NextResponse.json({
-      message: "OK",
-      data: { shortUrl: `${process.env.HOST}/${hash}`, uid: hash, link },
+    if (!existingLink)
+      return NextResponse.json(
+        { message: "Link does not exist.", status: 400 },
+        { status: 400 }
+      );
+
+    await prisma.link.delete({
+      where: {
+        uid,
+      },
     });
+
+    return NextResponse.json({ message: "OK", status: 200 }, { status: 200 });
   } catch (e) {
     return NextResponse.json(
       {

@@ -1,25 +1,33 @@
-import Image from 'next/image'
 import { redirect } from 'next/navigation';
 import { prisma } from '@/util/db';
 
 async function checkIfRedirect(slug: string) {
+  // Check if it's a redirect or page
+
   const link = await prisma.link.findUnique({
     where: {
       uid: slug[0]
-    }
+    },
+    cacheStrategy: { ttl: 60 }
   });
+
+  // If not, return
 
   if (!link) return;
 
+  // If it's a link, add one to the hit counter and update the query then redirect
+
+  let hits = ++link.hits
+  
   await prisma.link.update({
     where: {
-      uid: slug[0]
+      id: link.id
     },
     data: {
-      hits: link.hits++
+      hits
     }
   })
-  
+
   return redirect(link.link)
 }
 
