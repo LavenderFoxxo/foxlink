@@ -9,8 +9,8 @@ config.autoAddCss = false;
 const rootFont = Plus_Jakarta_Sans({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'FoxLink',
-  description: 'Simple link shortner codenamed "FoxLink" for personal use.',
+  title: 'Lavender',
+  description: 'welcome to the fox\'s website :3',
 }
 
 export default function RootLayout({
