@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google'
 import { config } from '@fortawesome/fontawesome-svg-core'
 import './globals.css'
 
+
 config.autoAddCss = false;
 
 const rootFont = Plus_Jakarta_Sans({ subsets: ['latin'] })

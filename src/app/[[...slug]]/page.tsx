@@ -1,7 +1,9 @@
-import { redirect } from 'next/navigation';
-import { prisma } from '@/util/db';
-import { motion } from 'framer-motion'
-import Link from 'next/link'
+"use client";
+import React from "react";
+import { redirect } from "next/navigation";
+import { prisma } from "@/util/db";
+import { motion } from "framer-motion";
+import Link from "next/link";
 import {
   faJs,
   faDocker,
@@ -19,98 +21,97 @@ import {
   faJava,
   faLaravel,
   faPhp,
-} from '@fortawesome/free-brands-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { IconDefinition } from '@fortawesome/fontawesome-svg-core'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import * as z from 'zod'
-import { toast } from 'react-hot-toast'
-import Spotify from '@/components/spotify';
-import Footer from '@/components/footer';
+} from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+
+import * as z from "zod";
+import { toast } from "react-hot-toast";
+import Footer from "@/components/footer";
+import Spotify from "@/components/spotify";
 
 const knowledge: Software[] = [
   {
-    name: 'JavaScript',
+    name: "JavaScript",
     icon: faJs,
   },
   {
-    name: 'HTML',
+    name: "HTML",
     icon: faHtml5,
   },
   {
-    name: 'CSS',
+    name: "CSS",
     icon: faCss3,
   },
   {
-    name: 'Node.js',
+    name: "Node.js",
     icon: faNodeJs,
   },
   {
-    name: 'Java',
+    name: "Java",
     icon: faJava,
   },
   {
-    name: 'React',
+    name: "React",
     icon: faReact,
   },
   {
-    name: 'Laravel',
+    name: "Laravel",
     icon: faLaravel,
   },
   {
-    name: 'PHP',
+    name: "PHP",
     icon: faPhp,
   },
   {
-    name: 'GitHub',
+    name: "GitHub",
     icon: faGithub,
   },
   {
-    name: 'Markdown',
+    name: "Markdown",
     icon: faMarkdown,
   },
   {
-    name: 'Git',
+    name: "Git",
     icon: faGit,
   },
   {
-    name: 'cPanel',
+    name: "cPanel",
     icon: faCpanel,
   },
   {
-    name: 'Ubuntu',
+    name: "Ubuntu",
     icon: faUbuntu,
   },
   {
-    name: 'Cloudflare',
+    name: "Cloudflare",
     icon: faCloudflare,
   },
   {
-    name: 'Vue.js',
+    name: "Vue.js",
     icon: faVuejs,
   },
   {
-    name: 'Docker',
+    name: "Docker",
     icon: faDocker,
   },
-]
+];
 
 const ContactSchema = z.object({
   name: z.string().min(2),
   email: z.string().min(5),
   message: z.string().min(5),
-})
+});
 
 interface Software {
-  name: string
-  icon: IconDefinition
+  name: string;
+  icon: IconDefinition;
 }
 
 interface ContactFormValues {
-  name: string
-  email: string
-  message: string
+  name: string;
+  email: string;
+  message: string;
 }
 
 async function checkIfRedirect(slug: string) {
@@ -118,9 +119,9 @@ async function checkIfRedirect(slug: string) {
 
   const link = await prisma.link.findUnique({
     where: {
-      uid: slug[0]
+      uid: slug[0],
     },
-    cacheStrategy: { ttl: 60 }
+    cacheStrategy: { ttl: 60 },
   });
 
   // If not, return
@@ -129,50 +130,50 @@ async function checkIfRedirect(slug: string) {
 
   // If it's a link, add one to the hit counter and update the query then redirect
 
-  let hits = ++link.hits
-  
+  let hits = ++link.hits;
+
   await prisma.link.update({
     where: {
-      id: link.id
+      id: link.id,
     },
     data: {
-      hits
-    }
-  })
-
-  return redirect(link.link)
-}
-
-export default async function Home({ params }: { params: { slug: string }}) {
-  if (params.slug) await checkIfRedirect(params.slug);
-  
-  const { register, reset, handleSubmit } = useForm<ContactFormValues>({
-    resolver: zodResolver(ContactSchema),
+      hits,
+    },
   });
 
-  let status: number
+  return redirect(link.link);
+}
 
-  const ContactSubmit = async (data: ContactFormValues) => {
-    try {
-      await fetch('/api/webhook', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      })
-        .then((response) => {
-          status = response.status as number
-        })
-        .then(() => {
-          if (status !== 200)
-            return toast.error('Something went wrong submitting the form D:')
+export default async function Home({ params }: { params: { slug: string } }) {
+  if (params.slug) await checkIfRedirect(params.slug);
 
-          reset()
-          toast.success('Successfully sent your message!')
-        })
-    } catch {
-      return toast.error('Something went wrong submitting the form D:')
-    }
-  }
+  // const { register, reset, handleSubmit } = useForm<ContactFormValues>({
+  //   resolver: zodResolver(ContactSchema),
+  // });
+
+  // let status: number
+
+  // const ContactSubmit = async (data: ContactFormValues) => {
+  //   try {
+  //     await fetch('/api/webhook', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify(data),
+  //     })
+  //       .then((response) => {
+  //         status = response.status as number
+  //       })
+  //       .then(() => {
+  //         if (status !== 200)
+  //           return toast.error('Something went wrong submitting the form D:')
+
+  //         reset()
+  //         toast.success('Successfully sent your message!')
+  //       })
+  //   } catch {
+  //     return toast.error('Something went wrong submitting the form D:')
+  //   }
+  // }
 
   return (
     <>
@@ -181,8 +182,8 @@ export default async function Home({ params }: { params: { slug: string }}) {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
       >
-        <div className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container mx-auto px-4 md:px-6">
+        <div className="w-full dark:bg-[#1f2937]">
+          <div className="container mx-auto px-4 md:px-6 pb-4 pt-16">
             <div className="flex flex-col items-center space-y-6">
               <div className="space-y-3 text-center dark:text-white">
                 <img
@@ -203,18 +204,19 @@ export default async function Home({ params }: { params: { slug: string }}) {
                   About Me
                 </h2>
                 <p className="opacity-90 text-md">
-                 Hiya! Welcome to my funny little website, I'm just your neighborhood-friendly fox, and I like to code! I'm a developer with a preferred
-                  preference for backend development. I'm a relatively simple
-                  person, I got into coding around the age of 14! My first ever
-                  Discord.JS bot, yikes that was a disaster. A few fun facts
-                  about me is and I also love to read. (I'm currently reading Warrior
-                  Cats!)
+                  Hiya! Welcome to my funny little website, I'm just your
+                  neighborhood-friendly fox, and I like to code! I'm a developer
+                  with a preferred preference for backend development. I'm a
+                  relatively simple person, I got into coding around the age of
+                  14! My first ever Discord.JS bot, yikes that was a disaster. A
+                  few fun facts about me is and I also love to read. (I'm
+                  currently reading Warrior Cats!)
                 </p>
                 <p className="opacity-90 text-md">
                   Besides that, you can usually catch me hanging around my
-                  friends, <span className="font-bold">Marino</span>,{' '}
-                  <span className="font-bold">Jack</span>,{' '}
-                  <span className="font-bold">Ethan</span> or{' '}
+                  friends, <span className="font-bold">Marino</span>,{" "}
+                  <span className="font-bold">Jack</span>,{" "}
+                  <span className="font-bold">Ethan</span> or{" "}
                   <span className="font-bold">Mathis</span>. If not with them,
                   you'll probably find me lost in the rabbit hole of TikTok,
                   quite addicting one some might say.
@@ -226,20 +228,31 @@ export default async function Home({ params }: { params: { slug: string }}) {
                 </h2>
                 <div className="space-y-4">
                   <div className="border dark:border-[#46505f] dark:bg-[#374151] p-4 rounded-lg hover:scale-105 transition-all">
-                    <h3 className="text-xl font-bold dark:text-white">Relatio</h3>
+                    <h3 className="text-xl font-bold dark:text-white">
+                      Relatio
+                    </h3>
                     <p className="text-zinc-500 dark:text-[#9097a4]">
                       A scalable solution for Roblox HR Management.
                     </p>
-                    <Link target="_blank" className="text-blue-500 font-semibold" href="https://relatio.cc">
+                    <Link
+                      target="_blank"
+                      className="text-blue-500 font-semibold"
+                      href="https://relatio.cc"
+                    >
                       View Project
                     </Link>
                   </div>
                   <div className="border dark:border-[#46505f] dark:bg-[#374151] p-4 rounded-lg hover:scale-105 transition-all">
                     <h3 className="text-xl font-bold">Unnamed Engineering</h3>
                     <p className="ext-zinc-500 dark:text-[#9097a4]">
-                    We're a global product studio composed of four teenage programmers.
+                      We're a global product studio composed of four teenage
+                      programmers.
                     </p>
-                    <Link target="_blank" className="text-blue-500 font-semibold" href="https://unnamed.engineering">
+                    <Link
+                      target="_blank"
+                      className="text-blue-500 font-semibold"
+                      href="https://unnamed.engineering"
+                    >
                       View Project
                     </Link>
                   </div>
@@ -249,7 +262,11 @@ export default async function Home({ params }: { params: { slug: string }}) {
                       A platform to view and share flight simulation photos with
                       fellow enthusiasts.
                     </p>
-                    <Link target="_blank" className="text-blue-500 font-semibold" href="https://fsphotos.cc">
+                    <Link
+                      target="_blank"
+                      className="text-blue-500 font-semibold"
+                      href="https://fsphotos.cc"
+                    >
                       View Project
                     </Link>
                   </div>
@@ -263,7 +280,7 @@ export default async function Home({ params }: { params: { slug: string }}) {
                   <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                     {knowledge.map((software, id) => (
                       <div className="flex items-center space-x-2" key={id}>
-                        <FontAwesomeIcon width={'15px'} icon={software.icon} />
+                        <FontAwesomeIcon width={"15px"} icon={software.icon} />
                         <p>{software.name}</p>
                       </div>
                     ))}
@@ -275,7 +292,8 @@ export default async function Home({ params }: { params: { slug: string }}) {
                   Contact
                 </h2>
                 <div className="border p-4 rounded-lg dark:border-[#46505f] dark:bg-[#374151]">
-                  <form
+                  <p>form broken right now, oops lol hehehehe</p>
+                  {/* <form
                     onSubmit={handleSubmit(ContactSubmit)}
                     className="space-y-3"
                   >
@@ -302,15 +320,15 @@ export default async function Home({ params }: { params: { slug: string }}) {
                       value="Submit"
                       type="submit"
                     />
-                  </form>
+                  </form> */}
                 </div>
               </div>
             </div>
           </div>
-          <Spotify />
           <Footer />
+          <Spotify />
         </div>
       </motion.div>
     </>
-  )
+  );
 }

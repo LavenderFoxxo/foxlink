@@ -1,3 +1,4 @@
+'use client';
 import Link from 'next/link'
 import { faGithub, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -15,11 +16,8 @@ const Footer: React.FC = () => {
           <Link href="https://instagram.com/alexanderhy04">
             <FontAwesomeIcon width={'20px'} icon={faInstagram} />
           </Link>
-          <Link href="https://github.com/LavenderFoxxo">
+          <Link href="https://github.com/fennecdotmp3">
           <FontAwesomeIcon width={'20px'} icon={faGithub} />
-          </Link>
-          <Link href="https://twitter.com/alexanderhy04">
-          <FontAwesomeIcon width={'20px'} icon={faTwitter} />
           </Link>
         </div>
       </div>
