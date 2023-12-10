@@ -154,7 +154,6 @@ export default async function Home({ params }: { params: { slug: string }}) {
 
   const ContactSubmit = async (data: ContactFormValues) => {
     try {
-      setLoading(true)
       await fetch('/api/webhook', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -164,7 +163,6 @@ export default async function Home({ params }: { params: { slug: string }}) {
           status = response.status as number
         })
         .then(() => {
-          setLoading(false)
           if (status !== 200)
             return toast.error('Something went wrong submitting the form D:')
 
@@ -172,7 +170,6 @@ export default async function Home({ params }: { params: { slug: string }}) {
           toast.success('Successfully sent your message!')
         })
     } catch {
-      setLoading(false)
       return toast.error('Something went wrong submitting the form D:')
     }
   }
