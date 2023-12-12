@@ -24,9 +24,6 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
-
-import * as z from "zod";
-import { toast } from "react-hot-toast";
 import Footer from "@/components/footer";
 import Spotify from "@/components/spotify";
 
@@ -97,21 +94,9 @@ const knowledge: Software[] = [
   },
 ];
 
-const ContactSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().min(5),
-  message: z.string().min(5),
-});
-
 interface Software {
   name: string;
   icon: IconDefinition;
-}
-
-interface ContactFormValues {
-  name: string;
-  email: string;
-  message: string;
 }
 
 async function checkIfRedirect(slug: string) {
@@ -146,34 +131,6 @@ async function checkIfRedirect(slug: string) {
 
 export default async function Home({ params }: { params: { slug: string } }) {
   if (params.slug) await checkIfRedirect(params.slug);
-
-  // const { register, reset, handleSubmit } = useForm<ContactFormValues>({
-  //   resolver: zodResolver(ContactSchema),
-  // });
-
-  // let status: number
-
-  // const ContactSubmit = async (data: ContactFormValues) => {
-  //   try {
-  //     await fetch('/api/webhook', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify(data),
-  //     })
-  //       .then((response) => {
-  //         status = response.status as number
-  //       })
-  //       .then(() => {
-  //         if (status !== 200)
-  //           return toast.error('Something went wrong submitting the form D:')
-
-  //         reset()
-  //         toast.success('Successfully sent your message!')
-  //       })
-  //   } catch {
-  //     return toast.error('Something went wrong submitting the form D:')
-  //   }
-  // }
 
   return (
     <>

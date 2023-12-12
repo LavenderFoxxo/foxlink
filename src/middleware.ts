@@ -4,6 +4,7 @@ import { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
   const requestHeaders = headers();
+  // grab user ip from cloudflare's headers
   const userIp =
     (requestHeaders.get("cf-connecting-ip") as string);
 
