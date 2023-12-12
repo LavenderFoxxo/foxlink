@@ -26,8 +26,6 @@ export async function POST(req: NextRequest) {
         { status: 401 }
       );
 
-    console.log(requestHeaders);
-
     const reqBody = await req.json();
 
     if (typeof reqBody.url == undefined)

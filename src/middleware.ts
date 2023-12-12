@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 export async function middleware(req: NextRequest) {
   const requestHeaders = headers();
   const userIp =
-    (requestHeaders.get("x-forwarded-for") as string);
+    (requestHeaders.get("cf-connecting-ip") as string);
 
   await prisma.request.create({
     data: {
