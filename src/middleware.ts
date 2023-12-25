@@ -6,7 +6,7 @@ export async function middleware(req: NextRequest) {
   const requestHeaders = headers();
   // grab user ip from cloudflare's headers
   const userIp =
-    (requestHeaders.get("cf-connecting-ip") as string);
+    (requestHeaders.get("cf-connecting-ip") as string) ?? "127.0.0.1";
 
   await prisma.request.create({
     data: {

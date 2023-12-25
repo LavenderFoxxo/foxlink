@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { customAlphabet } from "nanoid";
 import { prisma } from "@/util/db";
+import { NextApiRequest } from "next";
 
 const characters =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -26,15 +27,13 @@ export async function POST(req: NextRequest) {
         { status: 401 }
       );
 
-    const reqBody = await req.json();
+    const link = req.nextUrl.searchParams.get("link")
 
-    if (typeof reqBody.url == undefined)
-      return NextResponse.json(
-        { message: "Malformed Request", status: 400 },
-        { status: 400 }
-      );
-
-    const link = reqBody.url;
+    if (!link) 
+    return NextResponse.json(
+      { message: "Malformed Request", status: 400 },
+      { status: 400 }
+    );
 
     let hash = getHash();
     while (await checkIfExisting(hash)) {
@@ -54,6 +53,7 @@ export async function POST(req: NextRequest) {
       data: { shortUrl: `${process.env.HOST}/${hash}`, uid: hash, link },
     });
   } catch (e) {
+    console.log(e)
     return NextResponse.json(
       {
         message: "Error",
