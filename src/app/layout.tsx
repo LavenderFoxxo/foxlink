@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import "./globals.css";
@@ -22,7 +21,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={rootFont.className}>
         <div>{children}</div>
-        <SpeedInsights />
       </body>
     </html>
   );
