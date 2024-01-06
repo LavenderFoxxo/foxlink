@@ -144,7 +144,7 @@ export default async function Home({ params }: { params: { slug: string } }) {
             <div className="flex flex-col items-center space-y-6">
               <div className="space-y-3 text-center dark:text-white">
                 <img
-                  src="https://alekeagle.me/vqA1BBfYyi.png"
+                  src="https://i.imgur.com/xOun3pY.png"
                   className="rounded-full mx-auto"
                   height="140"
                   width="140"
